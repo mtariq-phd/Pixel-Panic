@@ -1,0 +1,38 @@
+body {
+  text-align: center;
+  background: #222;
+  color: white;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+canvas {
+  background: #333;
+  display: block;
+  margin: 20px auto;
+  border: 2px solid #fff;
+}
+
+#lives {
+  margin: 10px;
+}
+
+.life {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin: 2px;
+  border-radius: 50%;
+  background: red;
+  transition: opacity 0.5s ease;
+}
+
+.lost {
+  opacity: 0.2;
+}
+
+#message {
+  font-size: 24px;
+  margin-top: 15px;
+}
