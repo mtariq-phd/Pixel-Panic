@@ -11,6 +11,17 @@
   <canvas id="gameCanvas" width="400" height="500"></canvas>
   <div id="message"></div>
 
+  <div id="levelDisplay" style="font-size: 36px; font-weight: bold; margin: 10px; color: white;">Level: 1</div>
+
+<!-- Game control buttons -->
+  <button id="startBtn">Start Game</button>
+  <button id="pauseBtn">Pause</button>
+  <button id="exitBtn">Exit</button>
+  <button id="continueBtn" style="display:none;">Continue</button>
+
+    <!-- Setup the game 
+     load JavaScript files after the HTML elements are defined 
+     -->
   <script src="js/input.js"></script>
   <script src="js/player.js"></script>
   <script src="js/obstacle.js"></script>
