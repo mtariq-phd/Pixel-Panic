@@ -4,7 +4,7 @@ class Player {
   // ...constructor
   constructor(canvasWidth, canvasHeight) {
     this.width = 60;
-    this.height = 20;
+    this.height = 15;
     this.speed = 10;//speed of the player movment
     this.x = (canvasWidth - this.width) / 2;
     this.y = canvasHeight - this.height - 20;
@@ -25,7 +25,7 @@ class Player {
 
   // draw(): Renders player, with visual change if invulnerable (hit recently).
   draw(ctx) {
-    ctx.fillStyle = this.invulnerable ? "rgba(0, 255, 0, 0.5)" : "cyan";
+    ctx.fillStyle = this.invulnerable ? "rgba(255, 0, 0, 0.5)" : "cyan";
     ctx.fillRect(this.x, this.y, this.width, this.height);
   }
 

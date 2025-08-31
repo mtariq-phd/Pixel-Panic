@@ -28,6 +28,29 @@ canvas {
   transition: opacity 0.5s ease;
 }
 
+.life {
+  width: 20px;
+  height: 20px;
+  margin: 2px;
+}
+
+.life-heart {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin: 2px;
+  background: pink;
+  clip-path: polygon(
+    50% 10%, 65% 0%, 80% 10%, 80% 25%, 80% 40%, 
+    65% 55%, 50% 75%, 35% 55%, 20% 40%, 20% 25%, 
+    20% 10%, 35% 0%
+);/* pixelated heart shape*/
+  image-rendering: pixelated;
+  margin-right: 4px;
+  transition: opacity 0.5s ease;
+}
+
+
 .lost {
   opacity: 0.2;
 }

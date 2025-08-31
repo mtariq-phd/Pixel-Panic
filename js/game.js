@@ -15,21 +15,25 @@ let isRunning = false;
 let isPaused = false;
 let showingTransition = false;
 
+// initialise the componnents of the game
 let player = null;
 let obstacles = [];
+let stars = [];
 let frameCount = 0;
 let level = 1;
+let points = 0;
 let gameOver = false;
+let starSpawnTimer = 0;
 
 // ----------- Helper Functions --------------
 
 // Render lives UI, fading out lost lives
-function drawLives() {
+function drawLives() { 
   livesDiv.innerHTML = "";
   // Draw up to 5 hearts, faded if lost
   for (let i = 0; i < 5; i++) {
     let life = document.createElement("div");
-    life.className = "life" + (i >= player.lives ? " lost" : "");
+    life.className = "life-heart" + (i >= player.lives ? " lost" : "");
     livesDiv.appendChild(life);
   }
 }
@@ -46,13 +50,16 @@ function createObstacle() {
 
 // MAIN GAME LOOP
 function update() {
+
+  //console.log("Game board updated ...");
+
   // Exit loop if game is not running or is paused/transitioning
   if (!isRunning || isPaused || showingTransition) return;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   frameCount++;
 
-  // Obstacle speed and spawn rate adjust with level
+  // ----- Obstacle speed and spawn rate adjust with level
   const obstacleSpeed = 1.5 + level; // speed increases each level
   const spawnRate = level === 1 ? 35 : level === 2 ? 25 : 15;//rate of obstacle spawning
 
@@ -100,6 +107,60 @@ function update() {
   }
 
   if (isRunning) requestAnimationFrame(update);
+
+  // -------- Score updating and rendering the stars
+  const starLimit = level === 1 ? 10 : level === 2 ? 20 : 30;
+  const starSpawnRate = level === 1 ? 300 : level === 2 ? 200 : 150; // much less frequent than obstacles
+
+  //console.log("Framecount logic: " + (frameCount % starSpawnRate === 0));
+  //console.log("Stars length logic: " + (stars.length < starLimit));
+  if (starSpawnTimer <= 0 && stars.length < starLimit) {
+    stars.push(new Star(canvas.width));
+    //console.log("Star spawned,", stars.length);
+    starSpawnTimer = starSpawnRate;
+  } else {
+    starSpawnTimer--;
+  }
+
+  // update and render stars
+  for (let i = stars.length - 1; i >= 0; i--) {
+    const star = stars[i];
+    star.update(obstacleSpeed); // same falling speed as obstacles or adjust separately
+    star.draw(ctx);
+    //console.log("Star drawn at", star.x, star.y);
+
+    // Remove star if off-screen
+    if (star.isOffScreen(canvas.height)) stars.splice(i, 1);
+
+      // Collision detection with player
+      if (star.collidesWith(player)) {
+        // Calculate risk factor = inverse of nearest obstacle distance from star's position
+
+        let nearestDist = Infinity;
+        for (const obs of obstacles) {
+          const dx = (obs.x + obs.size / 2) - (star.x + star.size / 2);
+          const dy = (obs.y + obs.size / 2) - (star.y + star.size / 2);
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < nearestDist) nearestDist = dist;
+        }
+        // If no obstacles, assign minimal base points
+        if (nearestDist === Infinity) nearestDist = 1;
+
+        console.log("Nearest dist to star ", nearestDist);
+        // Points inversely proportional to distance: e.g. score += 100 / nearestDist
+        const baseStarPoints = 5;
+        let pointsEarned = Math.floor(baseStarPoints * (100 / nearestDist));
+        points += pointsEarned;
+
+        console.log("Points added ..  ", points);
+
+        stars.splice(i, 1); // remove collected star
+
+        // Optionally update UI immediately
+        document.getElementById('score').innerText = points;
+        //console.log("Star collected: +", pointsEarned, "Points:", points);
+      }
+    }
 }
 
 // Pause, show new level message and display Continue button
@@ -120,6 +181,7 @@ function startGame() {
   isPaused = false;
   showingTransition = false;
   obstacles = [];
+  points = 0;
   frameCount = 0;
   level = 1;
   gameOver = false;
@@ -128,6 +190,7 @@ function startGame() {
   messageDiv.innerText = "";
   messageDiv.style.color = "white"; // reset to normal color for gameplay messages
   continueBtn.style.display = "none";
+  document.getElementById('score').innerText = points;
   updateLevelDisplay(level);
   update();
 }
@@ -154,13 +217,6 @@ function gameWon() {
 }
 
 // Exit: Stop loop, reset UI
-//function exitGame() {
- // isRunning = false;
-  //isPaused = false;
-  //messageDiv.innerText = "Exited. Click Start to play again.";
-  //continueBtn.style.display = "none";
-//}
-
 function exitGame() {
   isRunning = false;
   isPaused = false;
@@ -168,6 +224,7 @@ function exitGame() {
   showingTransition = false;
 
   obstacles = [];               // remove all obstacles
+  stars=[];
 
   if (player) {
     // Reset player position to center start
@@ -245,6 +302,3 @@ function showConfetti() {
   }
 }
 
-
-// Optionally: start game on load
-// startGame();
