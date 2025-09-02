@@ -94,7 +94,7 @@ function update() {
         messageDiv.style.color = "red";   // Give the message a noticeable red color
         isRunning = false; // Stop game loop
         gameOver = true;
-        showInstructions();
+        //showInstructions();
       }
     }
 
