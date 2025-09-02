@@ -10,11 +10,27 @@
   <div id="lives"></div>
   <div id="scoreContainer" style="display:inline-block; margin-left: 20px; font-size: 24px; color: white;">
   Score: <span id="score">0</span>
+  </div>
+
+  <!-- Game playing instructions -->
+  <div id="instructionsModal" style="display:none;">
+  <div class="instructions-content">
+    <h2>How to Play <em>Pixel Panic</em></h2>
+    <ul>
+      <li>Avoid the <b>pixels</b> using <b>Arrow Keys</b> to move left/right.</li>
+      <li>You have 5 lives. Lose all lives and the game ends.</li>
+      <li>Collect yellow stars for points. The riskier the star is to collect, the higher the points!</li>
+      <li>As the game progresses, you have to avoid more pixels, coming <em>faster</em> at you!</li>
+      <li>Pause/unpause with the <b>Spacebar</b>.</li>
+      <li>Click <b>Continue</b> or press <b>Spacebar</b> after each level; reach Level 3 to win.</li>
+      <!-- <li>Click <b>Start</b> to play, <b>Exit</b> to return to this screen.</li> -->
+    </ul>
+    <button id="closeInstructionsBtn">PLAY!</button>
+  </div>
 </div>
 
   <canvas id="gameCanvas" width="400" height="500"></canvas>
   <div id="message"></div>
-
   <div id="levelDisplay" style="font-size: 36px; font-weight: bold; margin: 10px; color: white;">Level: 1</div>
 
 <!-- Game control buttons -->

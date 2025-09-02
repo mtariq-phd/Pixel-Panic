@@ -9,6 +9,8 @@ const startBtn = document.getElementById("startBtn");
 const pauseBtn = document.getElementById("pauseBtn");
 const exitBtn = document.getElementById("exitBtn");
 const continueBtn = document.getElementById("continueBtn");
+const instructionsModal = document.getElementById("instructionsModal");
+const closeInstructionsBtn = document.getElementById("closeInstructionsBtn");
 
 // Game state flags
 let isRunning = false;
@@ -25,9 +27,16 @@ let points = 0;
 let gameOver = false;
 let starSpawnTimer = 0;
 
-// ----------- Helper Functions --------------
+// ------ Game instructions ------------
+function showInstructions() {
+  instructionsModal.style.display = "flex";
+}
+function hideInstructions() {
+  instructionsModal.style.display = "none";
+}
 
-// Render lives UI, fading out lost lives
+
+// ------ Render lives UI, fading out lost lives -----
 function drawLives() { 
   livesDiv.innerHTML = "";
   // Draw up to 5 hearts, faded if lost
@@ -38,15 +47,18 @@ function drawLives() {
   }
 }
 
-// Update displayed level each frame or on change
+// ------ Update displayed level each frame or on change ------
 function updateLevelDisplay(level) {
   levelDisplay.textContent = `Level: ${level}`;
 }
 
-// Spawn a new obstacle at a random position
+// ------- Spawn a new obstacle at a random position ---------
 function createObstacle() {
   obstacles.push(new Obstacle(canvas.width));
 }
+
+// -------  Show instructions on load (or first Start click) ---------
+window.onload = showInstructions;
 
 // MAIN GAME LOOP
 function update() {
@@ -82,6 +94,7 @@ function update() {
         messageDiv.style.color = "red";   // Give the message a noticeable red color
         isRunning = false; // Stop game loop
         gameOver = true;
+        showInstructions();
       }
     }
 
@@ -247,11 +260,18 @@ function exitGame() {
   if (player) {
     player.draw(ctx);
   }
+  showInstructions();
 }
+
+closeInstructionsBtn.onclick = function() {
+  hideInstructions();
+  startGame();
+};
 
 
 // -------- Button Event Listeners -----------
-startBtn.addEventListener("click", startGame);
+// startBtn.addEventListener("click", startGame);
+startBtn.addEventListener("click", showInstructions);
 pauseBtn.addEventListener("click", pauseGame);
 exitBtn.addEventListener("click", exitGame);
 continueBtn.addEventListener("click", continueGame);
